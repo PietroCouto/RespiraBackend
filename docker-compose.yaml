@@ -1,0 +1,35 @@
+services:
+  respiradb:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=respira1234
+    container_name: respira-db
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5431:5432'
+
+  respirabackend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: respira-backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - respiradb
+    volumes:
+      - ./src:/respirabackend/src
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: respira-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    ports:
+      - '5050:80'
+    depends_on:
+      - respiradb
