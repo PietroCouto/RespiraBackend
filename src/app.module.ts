@@ -8,11 +8,11 @@ import { DataSource } from 'typeorm';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'respiradb',
       port: 5432,
       username: 'postgres',
       password: 'respira1234',
-      database: 'respira-db',
+      database: 'respira',
       entities: [],
       synchronize: true, // Set to false in production
       logging: true, // Enable logging for debugging
