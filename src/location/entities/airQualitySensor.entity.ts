@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Location } from './main';
+import { Location } from '.';
 
 @Entity('air_quality_sensor')
 export class AirQualitySensor {

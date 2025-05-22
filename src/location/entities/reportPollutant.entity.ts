@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, PrimaryColumn, ManyToOne } from 'typeorm';
-import { AirQualityReport, Pollutant } from './main';
+import { AirQualityReport, Pollutant } from '.';
 import { Severity } from './airQualityReport.entity';
 
 @Entity('report_pollutant')
