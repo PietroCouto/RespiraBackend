@@ -9,6 +9,9 @@ export class Location {
   name: string;
 
   @Column()
+  city: string;
+
+  @Column()
   state: string;
 
   @Column()
