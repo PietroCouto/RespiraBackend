@@ -13,15 +13,15 @@ export class LocationService {
     private dataSource: DataSource,
   ) {}
 
-  getLocationByName(name: string): Promise<Location | null> {
+  async getLocationByName(name: string): Promise<Location | null> {
     return this.locationRepository.findOneBy({ name });
   }
 
-  getLocationById(id: bigint): Promise<Location | null> {
+  async getLocationById(id: bigint): Promise<Location | null> {
     return this.locationRepository.findOneBy({ id });
   }
 
-  getLatestLocationReport(
+  async getLatestLocationReport(
     name: string,
   ): Promise<CurrentLocationAirQualityDto | null> {
     return this.dataSource
