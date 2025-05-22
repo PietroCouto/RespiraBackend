@@ -16,7 +16,7 @@ export class AirQualityReport {
   @JoinColumn({ name: 'sensorId' })
   sensorId: bigint;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamptz' })
   date: Date;
 
   @Column({

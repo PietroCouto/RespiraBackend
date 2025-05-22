@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Location } from './entities';
 import { CurrentLocationAirQualityDto } from './dto';
 import { DataSource } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 
 @Injectable()
 export class LocationService {
@@ -24,9 +26,8 @@ export class LocationService {
   async getLatestLocationReport(
     name: string,
   ): Promise<CurrentLocationAirQualityDto | null> {
-    return this.dataSource
-      .query(
-        `
+    const result: CurrentLocationAirQualityDto[] = await this.dataSource.query(
+      `
           SELECT
             json_build_object(
               'id', 		l.id,
@@ -64,8 +65,26 @@ export class LocationService {
           ORDER BY ar.date DESC
           LIMIT 1
     `,
-        [name],
-      )
-      .then((rows: CurrentLocationAirQualityDto[]) => rows[0] || null); // Return single result or null
+      [name],
+    );
+
+    if (!result[0]) return null;
+
+    // THIS IS ABSOLUTELY TEMPORARY
+    // TODO: REMOVE THIS
+    result[0].recommendations = [
+      'Evite atividades ao ar livre durante o pico de poluição.',
+      'Use máscara se necessário.',
+      'Mantenha janelas fechadas para evitar a entrada de poluentes.',
+    ];
+
+    const dto: CurrentLocationAirQualityDto = plainToInstance(
+      CurrentLocationAirQualityDto,
+      result[0],
+    );
+
+    await validateOrReject(dto);
+
+    return dto;
   }
 }
