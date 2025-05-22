@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn, JoinColumn } from 'typeorm';
+import { AirQualitySensor } from './airQualitySensor.entity';
 
 export enum Severity {
   LOW = 'LOW',
@@ -10,6 +11,10 @@ export enum Severity {
 export class AirQualityReport {
   @PrimaryColumn({ type: 'bigint' })
   id: bigint;
+
+  @ManyToOne(() => AirQualitySensor)
+  @JoinColumn({ name: 'sensorId' })
+  sensorId: bigint;
 
   @Column({ type: 'date' })
   date: Date;

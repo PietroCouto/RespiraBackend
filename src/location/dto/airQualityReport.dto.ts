@@ -4,7 +4,7 @@ import { PollutantDto } from './pollutant.dto';
 
 export class AirQualityReportDto {
   @IsNumber()
-  id: number;
+  id: bigint;
 
   @IsDate()
   date: Date;

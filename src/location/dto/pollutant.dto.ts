@@ -12,5 +12,5 @@ export class PollutantDto {
   concentration: string;
 
   @IsEnum(Severity)
-  generalSeverity: Severity;
+  severity: Severity;
 }
