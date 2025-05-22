@@ -62,6 +62,7 @@ export class LocationService {
           l.id, l.name, l.city, l.state, l.lat, l.long,
           ar.id, ar.date, ar."generalSeverity"
           ORDER BY ar.date DESC
+          LIMIT 1
     `,
         [name],
       )
