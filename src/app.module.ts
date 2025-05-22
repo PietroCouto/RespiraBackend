@@ -10,7 +10,7 @@ import {
   AirQualitySensor,
   Pollutant,
   ReportPollutant,
-} from './location/entities/main'; // Adjust the import path as necessary
+} from './location/entities'; // Adjust the import path as necessary
 
 @Module({
   imports: [
