@@ -4,7 +4,13 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { LocationModule } from './location/location.module';
-import { Location } from './location/location.entity'; // Adjust the import path as necessary
+import {
+  Location,
+  AirQualityReport,
+  AirQualitySensor,
+  Pollutant,
+  ReportPollutant,
+} from './location/entities/main'; // Adjust the import path as necessary
 
 @Module({
   imports: [
@@ -15,7 +21,13 @@ import { Location } from './location/location.entity'; // Adjust the import path
       username: 'postgres',
       password: 'respira1234',
       database: 'postgres',
-      entities: [Location],
+      entities: [
+        Location,
+        AirQualityReport,
+        AirQualitySensor,
+        Pollutant,
+        ReportPollutant,
+      ],
       synchronize: true, // Set to false in production
       logging: true, // Enable logging for debugging
     }),
