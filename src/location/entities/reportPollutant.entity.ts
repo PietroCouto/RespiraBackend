@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryColumn, ManyToOne } from 'typeorm';
+import { AirQualityReport, Pollutant } from './main';
 import { Severity } from './airQualityReport.entity';
 
 @Entity('report_pollutant')
@@ -6,10 +7,12 @@ export class ReportPollutant {
   @PrimaryColumn({ type: 'bigint' })
   id: bigint;
 
-  @Column({ type: 'bigint' })
-  airQualityReportId: bigint;
+  @ManyToOne(() => AirQualityReport)
+  @JoinColumn({ name: 'airQualityReportId' })
+  airQualityReportId: AirQualityReport;
 
-  @Column({ type: 'bigint' })
+  @ManyToOne(() => Pollutant)
+  @JoinColumn({ name: 'pollutantId' })
   pollutantId: bigint;
 
   @Column({ type: 'varchar', length: 10 })
