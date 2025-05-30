@@ -117,10 +117,6 @@ export class LocationService {
   async getLocationReportHistory(
     id: bigint,
   ): Promise<currentLocationAirHistoryDto> {
-    if (!id) {
-      throw new Error('Location ID is required');
-    }
-
     // Query for reports related to the location
     const result: currentLocationAirHistoryDto | undefined =
       await this.dataSource
