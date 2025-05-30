@@ -1,7 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { LocationService } from './location.service';
-import { Location } from './entities';
-import { CurrentLocationAirQualityDto } from './dto';
+import {
+  CurrentLocationAirQualityDto,
+  currentLocationAirHistoryDto,
+} from './dto';
 
 @Controller()
 export class LocationController {
@@ -14,8 +16,10 @@ export class LocationController {
     return this.locationService.getLatestLocationReport(name);
   }
 
-  @Get('/current-location-air-history/:id')
-  getLocationHistory(@Param('id') id: bigint): Promise<Location | null> {
-    return this.locationService.getLocationById(id);
+  @Get('/current-location-air-history')
+  getLocationHistory(
+    @Query('id') id: bigint,
+  ): Promise<currentLocationAirHistoryDto> {
+    return this.locationService.getLocationReportHistory(id);
   }
 }
