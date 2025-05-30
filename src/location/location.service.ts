@@ -28,7 +28,7 @@ export class LocationService {
 
   async getLatestLocationReport(
     name: string,
-  ): Promise<CurrentLocationAirQualityDto | null> {
+  ): Promise<CurrentLocationAirQualityDto> {
     const result: CurrentLocationAirQualityDto[] = await this.dataSource.query(
       `
           SELECT
@@ -71,15 +71,17 @@ export class LocationService {
       [name],
     );
 
-    if (!result[0]) return null;
+    if (!result[0]) {
+      result[0] = new CurrentLocationAirQualityDto();
+    }
 
     // THIS IS ABSOLUTELY TEMPORARY
     // TODO: REMOVE THIS
-    result[0].recommendations = [
-      'Evite atividades ao ar livre durante o pico de poluição.',
-      'Use máscara se necessário.',
-      'Mantenha janelas fechadas para evitar a entrada de poluentes.',
-    ];
+    // result[0].recommendations = [
+    //   'Evite atividades ao ar livre durante o pico de poluição.',
+    //   'Use máscara se necessário.',
+    //   'Mantenha janelas fechadas para evitar a entrada de poluentes.',
+    // ];
 
     const dto: CurrentLocationAirQualityDto = plainToInstance(
       CurrentLocationAirQualityDto,

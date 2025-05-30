@@ -12,7 +12,7 @@ export class LocationController {
   @Get('/current-location-air-quality')
   getLatestLocationReport(
     @Query('name') name: string,
-  ): Promise<CurrentLocationAirQualityDto | null> {
+  ): Promise<CurrentLocationAirQualityDto> {
     return this.locationService.getLatestLocationReport(name);
   }
 
