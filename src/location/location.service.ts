@@ -117,53 +117,82 @@ export class LocationService {
   async getLocationReportHistory(
     id: bigint,
   ): Promise<currentLocationAirHistoryDto> {
-    // Query for reports related to the location
-    const result: currentLocationAirHistoryDto[] = await this.dataSource.query(
-      `
-        SELECT 
-          json_agg(report) AS "reports"
-        FROM (
-          SELECT
-            json_build_object(
-                'id', ar.id,
-                'date', ar.date,
-                'generalSeverity', ar."generalSeverity",
-                'pollutants',
-                  json_agg(
-                    json_build_object(
-                      'id', rp.id,
-                      'name', p.name,
-                      'concentration', rp.concentration,
-                      'severity', rp.severity
-                    )
-                  )
-            ) AS "report"
-          FROM location l
-          INNER JOIN air_quality_sensor s ON s."locationId" = l.id
-          INNER JOIN air_quality_report ar ON ar."sensorId" = s.id
-          INNER JOIN report_pollutant rp ON rp."airQualityReportId" = ar.id
-          INNER JOIN pollutant p ON p.id = rp."pollutantId"
-          WHERE l.id = $1
-          GROUP BY
-              l.id, l.name, l.city, l.state, l.lat, l.long,
-              ar.id, ar.date, ar."generalSeverity"
-          ORDER BY ar.date DESC
-          OFFSET 1
-          LIMIT 7
-        )
-    `,
-      [id],
-    );
-
-    // SQL query returns an array in which reports may be null if no reports exist
-    if (result[0].reports == null) {
-      result[0].reports = [];
+    if (!id) {
+      throw new Error('Location ID is required');
     }
+
+    // Query for reports related to the location
+    const result: currentLocationAirHistoryDto | undefined =
+      await this.dataSource
+        .createQueryBuilder(Location, 'l')
+
+        // Aggregate the location report data
+        .select('json_agg(report)', 'reports')
+
+        // From where to aggregate the location reports
+        .from(
+          (subQuery) =>
+            subQuery
+
+              // Select the reports
+              .select(
+                'json_build_object(' +
+                  "'id', ar.id," +
+                  "'date', ar.date," +
+                  "'generalSeverity', ar.generalSeverity," +
+                  "'pollutants'," +
+                  'json_agg(' +
+                  'json_build_object(' +
+                  "'id', rp.id," +
+                  "'name', p.name," +
+                  "'concentration', rp.concentration," +
+                  "'severity', rp.severity" +
+                  ')' +
+                  ')' +
+                  ')',
+                'report',
+              )
+
+              // From the location table
+              .from('location', 'l')
+
+              // Join the necessary tables to assemble the reports
+              .innerJoin('air_quality_sensor', 's', 's.locationId = l.id')
+              .innerJoin('air_quality_report', 'ar', 'ar.sensorId = s.id')
+              .innerJoin(
+                'report_pollutant',
+                'rp',
+                'rp.airQualityReportId = ar.id',
+              )
+              .innerJoin('pollutant', 'p', 'p.id = rp.pollutantId')
+
+              // Filter by the location ID
+              .where('l.id = :id', { id })
+
+              // Group by the location and report fields to ensure we get the reports
+              .groupBy(
+                'l.id, l.name, l.city, l.state, l.lat, l.long, ar.id, ar.date, ar."generalSeverity"',
+              )
+
+              // Order by the report date in descending order to get the latest reports
+              .orderBy('ar.date', 'DESC')
+
+              // Offset to start after the latest report
+              .offset(1)
+
+              // Limit to the latest 7 reports
+              .limit(7),
+          'report',
+        )
+        .getRawOne();
+
+    // Return an empty DTO if no results are found
+    if (!result) return new currentLocationAirHistoryDto();
 
     // Convert the result to the DTO
     const dto: currentLocationAirHistoryDto = plainToInstance(
       currentLocationAirHistoryDto,
-      result[0],
+      result,
     );
 
     // Validate the DTO
