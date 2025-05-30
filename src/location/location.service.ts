@@ -72,7 +72,7 @@ export class LocationService {
         .innerJoin('pollutant', 'p', 'p.id = rp.pollutantId')
 
         // Filter by the location name
-        .where('l.name = :name', { name })
+        .where('l.name LIKE :name', { name: `${name}%` })
 
         // Group by the location and report fields to ensure we get the latest report
         .groupBy(
