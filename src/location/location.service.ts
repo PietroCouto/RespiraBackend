@@ -90,13 +90,7 @@ export class LocationService {
     // If no results are found, return an empty DTO
     if (!result) return new CurrentLocationAirQualityDto();
 
-    // THIS IS ABSOLUTELY TEMPORARY
-    // TODO: REMOVE THIS
-    // result[0].recommendations = [
-    //   'Evite atividades ao ar livre durante o pico de poluição.',
-    //   'Use máscara se necessário.',
-    //   'Mantenha janelas fechadas para evitar a entrada de poluentes.',
-    // ];
+    // TODO: Query for favorite and reccommendations
 
     // Convert the result to the DTO
     const dto: CurrentLocationAirQualityDto = plainToInstance(
@@ -336,8 +330,12 @@ export class LocationService {
         // Limit to the latest report
         .getRawOne();
 
+    // TODO: Query for favorite and reccommendations
+
+    // Create a variable to hold the air quality history
     let airQualityHistory: AirQualityReportDto[] | undefined;
 
+    // Extract the air quality history from the current location's air history
     if (currentLocationAirHistory) {
       airQualityHistory = currentLocationAirHistory.reports;
     }
