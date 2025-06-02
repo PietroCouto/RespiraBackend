@@ -37,6 +37,7 @@ export class LocationController {
 
     const parsedId: bigint = BigInt(id);
 
+    console.log('Fetching location details for ID:', parsedId);
     return this.locationService.getLocationReportHistory(parsedId);
   }
 
@@ -47,11 +48,11 @@ export class LocationController {
    * @returns A promise that resolves to the information for the specified location.
    */
   @Get('/location-details')
-  getLocationDetails(@Query('id') id: string): Promise<LocationDetailsDto> {
+  getLocationDetails(@Query('id') id: number): Promise<LocationDetailsDto> {
     if (!id) throw new Error('Location ID is required');
 
-    const parsedId: bigint = BigInt(id);
+    console.log('Fetching location details for ID:', id);
 
-    return this.locationService.getLocationDetails(parsedId);
+    return this.locationService.getLocationDetails(id);
   }
 }
