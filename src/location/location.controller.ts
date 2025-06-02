@@ -21,6 +21,8 @@ export class LocationController {
   ): Promise<CurrentLocationAirQualityDto> {
     if (!name) throw new Error('Location ID is required');
 
+    console.log('Fetching latest air quality report for location:', name);
+
     return this.locationService.getLatestLocationReport(name);
   }
 
@@ -31,14 +33,13 @@ export class LocationController {
    */
   @Get('/current-location-air-history')
   getLocationHistory(
-    @Query('id') id: string,
+    @Query('id') id: number,
   ): Promise<currentLocationAirHistoryDto> {
     if (!id) throw new Error('Location ID is required');
 
-    const parsedId: bigint = BigInt(id);
+    console.log('Fetching location history for ID:', id);
 
-    console.log('Fetching location details for ID:', parsedId);
-    return this.locationService.getLocationReportHistory(parsedId);
+    return this.locationService.getLocationReportHistory(id);
   }
 
   /**

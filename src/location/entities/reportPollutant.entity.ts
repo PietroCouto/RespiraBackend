@@ -4,8 +4,8 @@ import { Severity } from './airQualityReport.entity';
 
 @Entity('report_pollutant')
 export class ReportPollutant {
-  @PrimaryColumn({ type: 'bigint' })
-  id: bigint;
+  @PrimaryColumn({ type: 'integer' })
+  id: number;
 
   @ManyToOne(() => AirQualityReport)
   @JoinColumn({ name: 'airQualityReportId' })
@@ -13,7 +13,7 @@ export class ReportPollutant {
 
   @ManyToOne(() => Pollutant)
   @JoinColumn({ name: 'pollutantId' })
-  pollutantId: bigint;
+  pollutantId: number;
 
   @Column({ type: 'varchar', length: 10 })
   concentration: string;

@@ -111,7 +111,7 @@ export class LocationService {
    * @returns A promise that resolves to the air quality report history for the location.
    */
   async getLocationReportHistory(
-    id: bigint,
+    id: number,
   ): Promise<currentLocationAirHistoryDto> {
     // Query for reports related to the location
     const result: currentLocationAirHistoryDto | undefined =

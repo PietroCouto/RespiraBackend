@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('location')
 export class Location {
-  @PrimaryColumn({ type: 'bigint' })
-  id: bigint;
+  @PrimaryColumn({ type: 'integer' })
+  id: number;
 
   @Column({ type: 'varchar', length: 80 })
   name: string;

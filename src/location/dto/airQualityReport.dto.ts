@@ -11,7 +11,7 @@ import { Type } from 'class-transformer';
 
 export class AirQualityReportDto {
   @IsNumber()
-  id: bigint;
+  id: number;
 
   @IsDate()
   @Type(() => Date)
