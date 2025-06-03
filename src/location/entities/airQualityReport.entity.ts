@@ -9,12 +9,12 @@ export enum Severity {
 
 @Entity('air_quality_report')
 export class AirQualityReport {
-  @PrimaryColumn({ type: 'bigint' })
-  id: bigint;
+  @PrimaryColumn({ type: 'integer' })
+  id: number;
 
   @ManyToOne(() => AirQualitySensor)
   @JoinColumn({ name: 'sensorId' })
-  sensorId: bigint;
+  sensorId: number;
 
   @Column({ type: 'timestamptz' })
   date: Date;

@@ -3,6 +3,7 @@ import { LocationService } from './location.service';
 import {
   CurrentLocationAirQualityDto,
   currentLocationAirHistoryDto,
+  LocationDetailsDto,
 } from './dto';
 
 @Controller()
@@ -20,6 +21,8 @@ export class LocationController {
   ): Promise<CurrentLocationAirQualityDto> {
     if (!name) throw new Error('Location ID is required');
 
+    console.log('Fetching latest air quality report for location:', name);
+
     return this.locationService.getLatestLocationReport(name);
   }
 
@@ -30,12 +33,27 @@ export class LocationController {
    */
   @Get('/current-location-air-history')
   getLocationHistory(
-    @Query('id') id: string,
+    @Query('id') id: number,
   ): Promise<currentLocationAirHistoryDto> {
     if (!id) throw new Error('Location ID is required');
 
-    const parsedId: bigint = BigInt(id);
+    console.log('Fetching location history for ID:', id);
 
-    return this.locationService.getLocationReportHistory(parsedId);
+    return this.locationService.getLocationReportHistory(id);
+  }
+
+  /**
+   * This endpoint retrieves the location data, current air quality and air
+   * quality history for a given location by id.
+   * @param id The id of the location to get the information from.
+   * @returns A promise that resolves to the information for the specified location.
+   */
+  @Get('/location-details')
+  getLocationDetails(@Query('id') id: number): Promise<LocationDetailsDto> {
+    if (!id) throw new Error('Location ID is required');
+
+    console.log('Fetching location details for ID:', id);
+
+    return this.locationService.getLocationDetails(id);
   }
 }
